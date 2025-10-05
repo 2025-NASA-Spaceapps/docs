@@ -43,6 +43,7 @@ graph TB
         MG[(MongoDB<br/>Documents)]
         RD[(Redis<br/>Cache)]
         ES[(Elasticsearch<br/>Search)]
+        BC[(Blockchain<br/>Immutable Records)]
     end
 
     subgraph "External Integrations"
@@ -101,7 +102,7 @@ graph TB
 ### Technology Stack Details
 - **Frontend**: React Native (iOS/Android), React.js (Web)
 - **Backend**: Python FastAPI microservices, Node.js for real-time services
-- **Database**: PostgreSQL (structured data), MongoDB (flexible schemas), Redis (caching/session), Elasticsearch (search/VR content)
+- **Database**: PostgreSQL (structured data), MongoDB (flexible schemas), Redis (caching/session), Elasticsearch (search/VR content), Blockchain (Ethereum/Polygon for public, Hyperledger for private)
 - **Cloud**: AWS EKS with Kubernetes orchestration
 - **AI/ML**: TensorFlow/PyTorch for model training, ONNX for inference optimization
 - **VR**: Unreal Engine 5 with WebXR for browser-based VR experiences
@@ -204,6 +205,7 @@ graph TD
         PROC[(Processed Data<br/>PostgreSQL)]
         CACHE[(Cache Layer<br/>Redis)]
         SEARCH[(Search Index<br/>Elasticsearch)]
+        BC[(Blockchain Layer<br/>Hashes/Ledger)]
     end
 
     subgraph "Analytics Layer"
@@ -238,6 +240,7 @@ graph TD
     ENRICH --> PROC
     PROC --> CACHE
     PROC --> SEARCH
+    PROC --> BC
 
     RAW --> ML
     PROC --> ML
@@ -250,6 +253,7 @@ graph TD
 
     CACHE --> MOBILE
     SEARCH --> WEB
+    BC --> API_OUT
     API_OUT --> MOBILE
     API_OUT --> WEB
     EXPORT --> WEB
@@ -282,6 +286,11 @@ graph TD
 - **Content Search**: Full-text search across educational materials
 - **VR Assets**: Indexed 3D models and scenes
 - **Analytics Data**: User behavior, engagement metrics
+
+**Blockchain (Immutable Records)**:
+- **Conservation Ledger**: sighting_hashes, validation_timestamps, consensus_data
+- **Token Transactions**: user_id, token_amount, transaction_hash, nft_metadata
+- **Data Integrity Hashes**: record_id, hash_value, blockchain_tx_id
 
 #### Data Integration Patterns
 - **ETL Pipelines**: Apache Airflow for scheduled data ingestion from NASA APIs
@@ -403,6 +412,66 @@ graph TD
 - **Fairness Metrics**: Equal performance across user demographics
 - **Transparency**: Open-source model architectures with documentation
 
+### Blockchain Architecture
+
+#### Blockchain Integration Overview
+Blockchain technology is integrated into Sharker to enhance data integrity, transparency, and trust in conservation efforts. It provides immutable records for user-generated data, tokenized rewards for gamification, and decentralized verification for scientific contributions. The implementation uses a hybrid approach combining public blockchains for transparency with private ledgers for sensitive data.
+
+```mermaid
+graph TB
+    subgraph "Blockchain Layer"
+        BC[Blockchain Network<br/>Ethereum/Polygon]
+        SC[Smart Contracts<br/>Solidity]
+        TOK[Token System<br/>ERC-20/ERC-721]
+        LED[Private Ledger<br/>Hyperledger]
+    end
+
+    subgraph "Integration Points"
+        UM[User Management<br/>Wallet Integration]
+        DM[Data Aggregation<br/>Hash Storage]
+        GM[Gamification<br/>Token Rewards]
+        CM[Conservation<br/>Verification Ledger]
+    end
+
+    subgraph "External Oracles"
+        NASA[NASA Data Oracles]
+        IUCN[IUCN Validation]
+        NOAA[NOAA Feeds]
+    end
+
+    UM --> BC
+    DM --> SC
+    GM --> TOK
+    CM --> LED
+
+    BC --> NASA
+    LED --> IUCN
+    SC --> NOAA
+```
+
+#### Blockchain Components
+- **Public Blockchain (Ethereum/Polygon)**: For transparent, global records of conservation data and tokenized rewards.
+- **Private Ledger (Hyperledger)**: For sensitive user data and internal validations.
+- **Smart Contracts**: Automate reward distributions, data verification, and conservation agreements.
+- **Token System**: ERC-20 tokens for points exchange, ERC-721 NFTs for unique achievements (e.g., shark adoption certificates).
+
+#### Blockchain Use Cases
+- **Data Integrity**: Store cryptographic hashes of sighting reports and migration data for tamper-proof records.
+- **Gamification Tokens**: Convert app points into blockchain tokens for trading or donations to conservation causes.
+- **Conservation Ledger**: Decentralized validation of user contributions, enabling peer-reviewed scientific data.
+- **Transparency Dashboard**: Public blockchain explorer for users to verify data authenticity.
+
+#### Blockchain Infrastructure
+- **Oracles**: Integrate NASA/NOAA/IUCN data via Chainlink oracles for real-time feeds.
+- **Wallets**: Built-in crypto wallets for users to manage tokens and NFTs.
+- **Scalability**: Layer-2 solutions (e.g., Polygon) for low-cost transactions.
+- **Security**: Multi-signature contracts, audited smart contracts, and decentralized storage (IPFS) for media assets.
+
+#### Blockchain Ethics and Compliance
+- **Environmental Impact**: Use eco-friendly blockchains to align with conservation goals.
+- **User Privacy**: Opt-in blockchain features with clear consent mechanisms.
+- **Regulatory Compliance**: Ensure tokens are non-securities, focusing on utility for education and conservation.
+
 ### Deployment and Scalability Architecture
 
 #### Kubernetes-Based Deployment
@@ -521,6 +590,7 @@ graph TD
         ENCRYPT_DB[TDE<br/>Transparent Data Encryption]
         MASKING[Data Masking<br/>PII Protection]
         AUDIT[Audit Logs<br/>Compliance Tracking]
+        BC_AUDIT[Blockchain Audit<br/>Immutable Trails]
         BACKUP[Encrypted Backups<br/>Cross-Region]
     end
 
@@ -541,7 +611,8 @@ graph TD
 
     ENCRYPT_DB --> MASKING
     MASKING --> AUDIT
-    AUDIT --> BACKUP
+    AUDIT --> BC_AUDIT
+    BC_AUDIT --> BACKUP
 
     IDS --> LOGGING
     LOGGING --> ALERTS
@@ -555,6 +626,7 @@ graph TD
 - **API Security**: OAuth 2.0 flows, API key rotation, rate limiting
 - **Container Security**: Image scanning, runtime protection, secrets management
 - **Network Security**: Zero-trust architecture, micro-segmentation
+- **Blockchain Security**: Multi-signature wallets, audited smart contracts, decentralized key management
 
 #### Compliance Framework
 - **GDPR/CCPA**: Data minimization, consent management, right to erasure
@@ -562,6 +634,7 @@ graph TD
 - **Accessibility**: WCAG 2.1 AA compliance for all interfaces
 - **Environmental**: Sustainable cloud practices, carbon footprint monitoring
 - **Data Ethics**: Bias detection in AI models, transparent algorithms
+- **Blockchain Compliance**: Token classification as utility assets, anti-money laundering checks for transactions, environmental impact assessments for blockchain networks
 
 #### Performance Optimization
 - **Caching Strategy**: Multi-layer caching (CDN, Redis, application-level)
@@ -615,13 +688,13 @@ graph TD
 
 ### 6. Conservation Tools
 - Observation diary with cloud sync.
-- Sighting reports validated against databases, geolocation-based.
-- Social sharing and alerts for threats.
+- Sighting reports validated against databases, geolocation-based, with blockchain verification for immutable records.
+- Social sharing and alerts for threats, including decentralized validation of conservation data.
 
 ### 7. Gamification and Rewards
-- Points system for activities (e.g., reporting sightings, completing quizzes, petting/fedding shark like Tamagotchi).
-- Leaderboards, badges (e.g., "Explorer" for km traveled by adopted shark), virtual/real rewards.
-- Push notifications for engagement.
+- Points system for activities (e.g., reporting sightings, completing quizzes, petting/fedding shark like Tamagotchi), convertible to blockchain tokens.
+- Leaderboards, badges (e.g., "Explorer" for km traveled by adopted shark), including NFTs for unique achievements.
+- Push notifications for engagement, with tokenized rewards for donations to conservation causes.
 
 ## User Flow Diagrams
 
@@ -685,6 +758,7 @@ graph TD
 2. **Phase 2: Enhanced Features (3 months)**: Add VR, gamification, simulations.
 3. **Phase 3: Full Integration (3 months)**: Social features, advanced AI, conservation tools.
 4. **Phase 4: Launch and Scale (Ongoing)**: Beta testing, user feedback, global expansion.
+5. **Phase 5: Blockchain Integration (3 months)**: Implement tokenized rewards, immutable data records via blockchain, decentralized verification for conservation data.
 
 ## Metrics for Success
 - User engagement: Quiz completions, VR sessions.
